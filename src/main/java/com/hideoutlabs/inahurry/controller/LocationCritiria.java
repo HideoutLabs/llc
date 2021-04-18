@@ -1,7 +1,6 @@
 package com.hideoutlabs.inahurry.controller;
 
-import com.hideoutlabs.inahurry.model.Customer;
-import com.hideoutlabs.inahurry.model.Location;
+import com.hideoutlabs.inahurry.model.MapLocation;
 
 
 
@@ -12,9 +11,9 @@ public class LocationCritiria {
     public double latitude;
     public double longitude;
     public boolean isValid;
-  public static  String staticIP = "10.20.11.22";
 
-     public LocationCritiria(Location input){
+
+     public LocationCritiria(MapLocation input){
          isValid =true;
 
 

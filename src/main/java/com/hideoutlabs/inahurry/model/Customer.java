@@ -1,6 +1,7 @@
 package com.hideoutlabs.inahurry.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,7 +15,18 @@ import java.util.Set;
 
 )
 
-public class Customer extends Person{
+public class Customer extends AppUser{
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "cusId=" + cusId +
+                ", cusFirstName='" + this.getFirstCustomerName() + '\'' +
+                ", cusLastName='" + this.getLastCustomerName() + '\'' +
+                ", cusIP='" + cusIP + '\'' +
+                ", cusEmail='" + cusEmail + '\'' +
+                '}';
+    }
+
     @Id
     @SequenceGenerator(
 
@@ -29,19 +41,19 @@ public class Customer extends Person{
     private  Long cusId;
 
     @Column( name ="cus_first_name",
-            nullable=false,
-            columnDefinition = "TEXT"
+            nullable=false
+
 
     )
-    private  String cusFirstName;
+    private  String customerFirstName;
 
 
     @Column( name ="cus_last_name",
             nullable=false,
-            columnDefinition = "TEXT"
+            columnDefinition = "VARCHAR(256)"
 
     )
-    private  String cusLastName;
+    private  String customerLastName;
 
     @Column( name ="customer_ip",
             nullable=false
@@ -51,27 +63,43 @@ public class Customer extends Person{
 
     @Column( name ="customer_email",
             nullable=false,
-            columnDefinition = "VARCHAR(256)"
+            columnDefinition = "VARCHAR(256)",
+            unique=true
 
     )
     private  String cusEmail;
 
     public Customer(Long cusId, String cusFirstName,String cusLastName,String cusIP,String cusEmail){
+        super();
         this.cusId=cusId;
-        this.cusFirstName=cusFirstName;
-        this.cusLastName=cusLastName;
+        this.customerFirstName=cusFirstName;
+        this.customerLastName=cusLastName;
         this.cusIP=cusIP;
         this.cusEmail=cusEmail;
     }
 
-
-
-    public String getFirstCusName() {
-        return cusFirstName;
+    public void setCustomerFirstName(String cusFirstName) {
+        this.customerFirstName = cusFirstName;
     }
 
-    public String getLastCusName() {
-        return cusLastName;
+    public void setCustomerLastName(String cusLastName) {
+        this.customerLastName = cusLastName;
+    }
+
+    public void setCusIP(String cusIP) {
+        this.cusIP = cusIP;
+    }
+
+    public void setCusEmail(String cusEmail) {
+        this.cusEmail = cusEmail;
+    }
+
+    public String getFirstCustomerName() {
+        return customerFirstName;
+    }
+
+    public String getLastCustomerName() {
+        return customerLastName;
     }
 
     public Long getCusId() {
@@ -86,7 +114,7 @@ public class Customer extends Person{
         return cusEmail;
     }
 
-    public Customer() {
+    public Customer(){
 
     }
 

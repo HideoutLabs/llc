@@ -21,33 +21,46 @@ public class CustomerManagementController {
 
 
    @GetMapping
-   @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_REPORT')")
+  // @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_REPORT')")
     public List<Customer> getAllCustomers(){
        System.out.println("getAllCustomers");
 
         return CUSTOMERS;
     }
 
+    @GetMapping(path="{customerId}")
+    // @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_REPORT')")
+    public Customer getCustomers(@PathVariable("customerId") Long custID){
+        System.out.println("getACustomers");
+        return CUSTOMERS.stream().filter(customer->custID.equals(customer.getCusId()))
+                .findFirst()
+                .orElseThrow(()->new IllegalStateException("Customer"+custID+"does not exist"));
+
+    }
+
     @PostMapping
-    @PreAuthorize("hasAuthority('customer:write')")
+   // @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_REPORT')")
     public void registerNewCustomer(@RequestBody Customer cust){
         System.out.println("registerNewCustomer");
         System.out.println(cust);
     }
 
     @DeleteMapping(path="{customerId}")
-    @PreAuthorize("hasAuthority('customer:write')")
+   // @PreAuthorize("hasAuthority('customer:write')")
     public void deleteCustomer(@PathVariable("customerId") Long custID){
         System.out.println("DeleteCustomer");
         System.out.println(custID);
     }
 
     @PutMapping(path="{customerId}")
-    @PreAuthorize("hasAuthority('customer:write')")
+   // @PreAuthorize("hasAuthority('customer:write')")
     public void updateCustomer(@PathVariable("customerId") Long custId,@RequestBody Customer cust){
         System.out.println("updateCustomer");
        System.out.println(String.format("%s %s",custId,cust));
     }
+
+
+
 
 
 }

@@ -6,6 +6,7 @@ import com.hideoutlabs.inahurry.exceptions.CustomException;
 import com.hideoutlabs.inahurry.exceptions.CustomExceptionImpl;
 import com.hideoutlabs.inahurry.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import com.hideoutlabs.inahurry.model.Users;
 import com.hideoutlabs.inahurry.repository.UserRepository;
@@ -64,7 +65,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Users findByEmail(String email) {
-        return userRepository.findUserByEmail(email);
+
+     return   userRepository
+                .findUserByEmail(email).orElseThrow(()-> new UsernameNotFoundException(String.format("%s was not found",email)));
+
+
     }
 
     @Override

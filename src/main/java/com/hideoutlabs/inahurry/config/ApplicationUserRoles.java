@@ -12,7 +12,7 @@ public enum ApplicationUserRoles {
 
     CUSTOMER(Sets.newHashSet()),
     ADMIN(Sets.newHashSet(ROUTE_READ,ROUTE_WRITE,CUSTOMER_READ,CUSTOMER_WRITE)),
-    REPORT(Sets.newHashSet(ROUTE_READ,CUSTOMER_READ));
+    REPORTER(Sets.newHashSet(ROUTE_READ,CUSTOMER_READ));
 
     private final Set<ApplicationUserPermission> permissions;
 
