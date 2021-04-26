@@ -1,4 +1,4 @@
-package com.hideoutlabs.inahurry.config;
+package com.hideoutlabs.inahurry.config.security;
 
 
 import org.springframework.context.annotation.Bean;
