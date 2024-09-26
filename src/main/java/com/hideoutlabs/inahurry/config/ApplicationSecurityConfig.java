@@ -16,6 +16,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
+import static com.hideoutlabs.inahurry.config.ApplicationUserPermission.CUSTOMER_WRITE;
+import static com.hideoutlabs.inahurry.config.ApplicationUserPermission.ROUTE_WRITE;
 import static com.hideoutlabs.inahurry.config.ApplicationUserRoles.*;
 
 @Configuration
@@ -34,20 +36,22 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
        http
-               .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()) //CSRF is sent by the server to a cookie ,Client submits the put|post|delete with that token
-               .and()
+      .csrf().disable()
+
+  //.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()) //CSRF is sent by the server to a cookie ,Client submits the put|post|delete with that token
+       //  .and()
                .authorizeRequests()
                .antMatchers("/","index","/css/*","/js/*").permitAll()
-               .antMatchers("/api/**").hasRole(CUSTOMER.name())
-//               .antMatchers(HttpMethod.DELETE,"/management/api/**").hasAuthority(ROUTE_WRITE.getPermission())
-//               .antMatchers(HttpMethod.POST,"/management/api/**").hasAuthority(ROUTE_WRITE.getPermission())
-//               .antMatchers(HttpMethod.PUT,"/management/api/**").hasAuthority(ROUTE_WRITE.getPermission())
-//               .antMatchers("/management/api/**").hasAnyRole(ADMIN.name(), REPORT.name())
+           .antMatchers("/api/**").hasRole(CUSTOMER.name())
+        .antMatchers(HttpMethod.DELETE,"/management/api/**").hasAuthority(ROUTE_WRITE.getPermission())
+               .antMatchers(HttpMethod.POST,"api/v1/registration").hasRole(CUSTOMER_WRITE.getPermission())
+            .antMatchers(HttpMethod.POST,"/management/api/**").hasAuthority(ROUTE_WRITE.getPermission())
+             .antMatchers(HttpMethod.PUT,"/management/api/**").hasAuthority(ROUTE_WRITE.getPermission())
+        .antMatchers("/management/api/**").hasAnyRole(ADMIN.name(), REPORTER.name())
                .anyRequest()
                .authenticated()
-               .and()
-               .formLogin()
-               .loginPage("/login").permitAll();
+              .and()
+              .httpBasic();
     }
 
     @Override
@@ -56,22 +60,22 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
      UserDetails userDetail=  User.builder()
                 .username("user")
                 .password(passwordEncoder.encode("password"))
-                //.roles(CUSTOMER.name()) //ROLE_CUSTOMER
+                .roles(CUSTOMER.name()) //ROLE_CUSTOMER
                 .authorities(CUSTOMER.getGrantedAuthorities())
                 .build();
 
      UserDetails adminuserDetail=   User.builder()
                 .username("admin")
                 .password(passwordEncoder.encode("password123"))
-               // .roles(ADMIN.name()) //ROLE_ADMIN
+               .roles(ADMIN.name()) //ROLE_ADMIN
              .authorities(ADMIN.getGrantedAuthorities())
                 .build();
 
         UserDetails reportuserDetail=   User.builder()
                 .username("report")
                 .password(passwordEncoder.encode("password123"))
-                .roles(REPORT.name()) //ROLE_REPORT
-                .authorities(REPORT.getGrantedAuthorities())
+                .roles(REPORTER.name()) //ROLE_REPORTER
+                .authorities(REPORTER.getGrantedAuthorities())
                 .build();
 
 

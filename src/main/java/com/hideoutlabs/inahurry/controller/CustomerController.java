@@ -1,33 +1,48 @@
 package com.hideoutlabs.inahurry.controller;
 
+import com.hideoutlabs.inahurry.exceptions.CustomException;
 import com.hideoutlabs.inahurry.model.Customer;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.hideoutlabs.inahurry.service.CustomerService;
+import javafx.fxml.Initializable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
-import java.util.List;
+import javax.validation.Valid;
+import java.net.URL;
+import java.util.*;
 
 @RestController
 @RequestMapping("api/v1/customers")
-public class CustomerController {
-
-   private static final List<Customer> CUSTOMER = Arrays.asList(
-           new Customer(1L,"James","Bond","192.168.0.12","cus1@mac.com"),
-           new Customer(2L,"Maria","Jones","192.168.0.13","cus2@mac.com"),
-          new Customer(3L,"Anna", "Smith","192.168.0.14","cus3@mac.com")
-   );
+public class CustomerController  {
 
 
+   @Autowired
+  private  CustomerService customerService;
 
+ 
 
     @GetMapping(path ="{cusId}")
-    public Customer  getCustomer(@PathVariable("cusId") Long cusId){
-        return CUSTOMER.stream().filter(customer->cusId.equals(customer.getCusId()))
-                .findFirst()
-                .orElseThrow(()->new IllegalStateException("Customer"+cusId+"does not exist"));
+ @PreAuthorize("hasAnyRole('ROLE_CUSTOMER')")
+    public Optional<Customer> getCustomer(@PathVariable("cusId") Long cusId){
+          return  customerService.findByID(cusId);
+
+                //.stream().filter(customer->cusId.equals(customer.getCusId()))
+               // .findFirst()
+                //.orElseThrow(()->new IllegalStateException("Customer"+cusId+"does not exist"));
     }
+
+
+    @PostMapping
+    @PreAuthorize("hasAnyRole('ROLE_CUSTOMER')")
+    public ResponseEntity<Customer> newCustomer(@Valid @RequestBody List<Customer> cus) {
+
+         customerService.saveCustomer(cus);
+        return new ResponseEntity<Customer>(HttpStatus.CREATED);
+    }
+
 
 
 

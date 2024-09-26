@@ -10,7 +10,7 @@ import javax.persistence.*;
         @UniqueConstraint(name="rider_ip_unique",columnNames = "rider_ip"),
         @UniqueConstraint(name="rider_email_unique",columnNames = "rider_email")
 })
-public class Rider extends Person {
+public class Rider extends AppUser{
 
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
@@ -55,6 +55,7 @@ public class Rider extends Person {
     private String riderEmail;
 
     public Rider(Long rId, String rFirstName, String rLastName, String rIP, String rEmail) {
+        super();
         this.riderId = rId;
         this.riderFirstName = rFirstName;
         this.riderLastName = rLastName;
@@ -82,9 +83,10 @@ public class Rider extends Person {
         return riderEmail;
     }
 
-    public Rider() {
+   public Rider(){
 
-    }
+   }
+
 }
 
 

@@ -2,7 +2,6 @@ package com.hideoutlabs.inahurry.service.impl;
 
 
 import com.hideoutlabs.inahurry.exceptions.ResourceNotFoundException;
-import com.hideoutlabs.inahurry.model.Location;
 import com.hideoutlabs.inahurry.model.Users;
 import com.hideoutlabs.inahurry.service.LocationsService;
 import com.maxmind.geoip2.DatabaseReader;
